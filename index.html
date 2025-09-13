@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verifica tu identidad - Zona segura Aire</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .recaptcha-box {
+      width: 90%;
+      max-width: 320px;
+      background: #ffffff;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      padding: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .check-area {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #2196f3;
+      margin-right: 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .check-area.checked::after {
+      content: "✔";
+      position: absolute;
+      top: -2px;
+      left: 5px;
+      font-size: 24px;
+      color: #2196f3;
+    }
+
+    .label-area {
+      flex: 1;
+      font-size: 16px;
+      color: #0d47a1;
+    }
+
+    .logo-note {
+      font-size: 9px;
+      color: #757575;
+      margin-top: 4px;
+    }
+
+    .loading-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 4px solid #bbdefb;
+      border-top: 4px solid #1e88e5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-msg {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #2e7d32;
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="recaptcha-box">
+      <div class="check-area" id="check-box" onclick="startFakeVerification(event)"></div>
+      <div class="label-area">
+        Confirmo que soy humano
+        <div class="logo-note">
+          Seguridad AI – Términos y condiciones
+        </div>
+      </div>
+      <div class="loading-layer" id="loading-layer">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <div class="success-msg" id="success-msg">Identidad verificada ✅</div>
+  </div>
+
+  <audio id="beep-sound" src="applepay.mp3" preload="auto"></audio>
+
+  <script>
+    function startFakeVerification(e) {
+      const layer = document.getElementById("loading-layer");
+      const box = document.getElementById("check-box");
+      const msg = document.getElementById("success-msg");
+      const beep = document.getElementById("beep-sound");
+
+      e.stopPropagation();
+
+      if (box.classList.contains("checked")) return;
+
+      layer.style.display = "flex";
+
+      setTimeout(() => {
+        layer.style.display = "none";
+        box.classList.add("checked");
+        beep.play();
+        msg.style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "";
+        }, 1200);
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
